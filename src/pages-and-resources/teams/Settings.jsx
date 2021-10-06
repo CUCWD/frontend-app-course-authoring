@@ -115,7 +115,7 @@ function TeamSettings({
     >
       {
         ({
-          handleChange, handleBlur, values, errors,
+          handleChange, handleBlur, values, errors, setFieldError,
         }) => (
           <>
             <h4 className="my-3 pb-2">{intl.formatMessage(messages.teamSize)}</h4>
@@ -142,6 +142,7 @@ function TeamSettings({
                         onDelete={() => remove(index)}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        setFieldError={setFieldError}
                       />
                     ))}
                     <Button

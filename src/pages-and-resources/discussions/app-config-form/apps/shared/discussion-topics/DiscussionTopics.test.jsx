@@ -17,7 +17,7 @@ import { executeThunk } from '../../../../../../utils';
 import { getAppsUrl } from '../../../../data/api';
 import { fetchApps } from '../../../../data/thunks';
 import { legacyApiResponse } from '../../../../factories/mockApiResponses';
-import LegacyConfigFormProvider from '../../legacy/LegacyConfigFormProvider';
+import OpenedXConfigFormProvider from '../../openedx/OpenedXConfigFormProvider';
 import messages from '../../../messages';
 import DiscussionTopics from './DiscussionTopics';
 
@@ -73,11 +73,11 @@ describe('DiscussionTopics', () => {
     const wrapper = render(
       <AppProvider store={store}>
         <IntlProvider locale="en">
-          <LegacyConfigFormProvider value={contextValue}>
+          <OpenedXConfigFormProvider value={contextValue}>
             <Formik initialValues={data}>
               <DiscussionTopics />
             </Formik>
-          </LegacyConfigFormProvider>
+          </OpenedXConfigFormProvider>
         </IntlProvider>
       </AppProvider>,
     );

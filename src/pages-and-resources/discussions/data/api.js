@@ -1,17 +1,17 @@
-import { ensureConfig, getConfig, camelCaseObject } from '@edx/frontend-platform';
+import { camelCaseObject, ensureConfig, getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import _ from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 import {
   checkStatus,
-  sortBlackoutDatesByStatus,
+  endOfDayTime,
+  getTime,
   mergeDateTime,
   normalizeDate,
   normalizeTime,
-  getTime,
+  sortBlackoutDatesByStatus,
   startOfDayTime,
-  endOfDayTime,
 } from '../app-config-form/utils';
 import { blackoutDatesStatus as constants } from './constants';
 
@@ -79,22 +79,16 @@ function normalizePiiSharing(data) {
 }
 
 function normalizeAppConfig(data) {
-  let ltiConfig = {};
-  const legacyConfig = {
-    id: 'legacy',
-    ...normalizePluginConfig(data.plugin_configuration),
-  };
   const piiConfig = {
     id: 'pii',
     ...normalizePiiSharing(data.lti_configuration),
   };
-  if (data.providers.active !== 'legacy') {
-    ltiConfig = {
-      id: data.providers.active,
-      ...normalizeLtiConfig(data.lti_configuration),
-    };
-  }
-  return [legacyConfig, ltiConfig, piiConfig];
+  const providerConfig = {
+    id: data.providers.active,
+    ...normalizePluginConfig(data.plugin_configuration),
+    ...normalizeLtiConfig(data.lti_configuration),
+  };
+  return [providerConfig, piiConfig];
 }
 
 function normalizeDiscussionTopic(data) {
@@ -139,6 +133,9 @@ function normalizeApps(data) {
   return {
     courseId: data.context_key,
     enabled: data.enabled,
+    enableInContext: data.enable_in_context,
+    enableGradedUnits: data.enable_graded_units,
+    unitLevelVisibility: data.unit_level_visibility,
     features: normalizeFeatures(data.features, apps),
     appConfigs: normalizeAppConfig(data),
     activeAppId: data.providers.active,
@@ -174,6 +171,9 @@ function denormalizeData(courseId, appId, data) {
   }
   if ('allowAnonymousPostsPeers' in data) {
     pluginConfiguration.allow_anonymous_to_peers = data.allowAnonymousPostsPeers;
+  }
+  if ('groupAtSubsection' in data) {
+    pluginConfiguration.group_at_subsection = data.groupAtSubsection;
   }
   if (data.blackoutDates?.length) {
     pluginConfiguration.discussion_blackouts = data.blackoutDates.map((blackoutDates) => (
@@ -217,13 +217,23 @@ function denormalizeData(courseId, appId, data) {
     ltiConfiguration.version = 'lti_1p1';
   }
 
-  return {
+  const apiData = {
     context_key: courseId,
     enabled: true,
     lti_configuration: ltiConfiguration,
     plugin_configuration: pluginConfiguration,
     provider_type: appId,
   };
+  if ('enableInContext' in data) {
+    apiData.enable_in_context = data.enableInContext;
+  }
+  if ('enableGradedUnits' in data) {
+    apiData.enable_graded_units = data.enableGradedUnits;
+  }
+  if ('unitLevelVisibility' in data) {
+    apiData.unit_level_visibility = data.unitLevelVisibility;
+  }
+  return apiData;
 }
 
 export function getAppsUrl(courseId) {

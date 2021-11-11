@@ -22,7 +22,7 @@ import {
   FAILED, LOADED, LOADING, selectApp,
 } from '../data/slice';
 import { saveAppConfig } from '../data/thunks';
-import LegacyConfigForm from './apps/legacy';
+import OpenedXConfigForm from './apps/openedx';
 import LtiConfigForm from './apps/lti';
 import AppConfigFormProvider, { AppConfigFormContext } from './AppConfigFormProvider';
 import AppConfigFormSaveButton from './AppConfigFormSaveButton';
@@ -57,7 +57,7 @@ function AppConfigForm({
       setConfirmationDialogVisible(true);
     } else {
       setConfirmationDialogVisible(false);
-      // Note that when this action succeeds, we redirect to pagesAndResurcesPath in the thunk.
+      // Note that when this action succeeds, we redirect to pagesAndResourcesPath in the thunk.
       dispatch(saveAppConfig(courseId, selectedAppId, values, pagesAndResourcesPath));
     }
   }, [activeAppId, confirmationDialogVisible, courseId, selectedAppId]);
@@ -78,12 +78,21 @@ function AppConfigForm({
     alert = <PermissionDeniedAlert />;
   }
 
-  let form = null;
+  let form;
   if (selectedAppId === 'legacy') {
     form = (
-      <LegacyConfigForm
+      <OpenedXConfigForm
         formRef={formRef}
         onSubmit={handleSubmit}
+        legacy
+      />
+    );
+  } else if (selectedAppId === 'openedx') {
+    form = (
+      <OpenedXConfigForm
+        formRef={formRef}
+        onSubmit={handleSubmit}
+        legacy={false}
       />
     );
   } else {

@@ -17,10 +17,8 @@ function updateAppState({
   features,
   activeAppId,
   appConfigs,
-  discussionTopicIds,
   discussionTopics,
-  divideDiscussionIds,
-  userPermissions,
+  ...discussionSettings
 }) {
   return async (dispatch) => {
     dispatch(addModels({ modelType: 'apps', models: apps }));
@@ -33,9 +31,7 @@ function updateAppState({
         activeAppId,
         appIds: apps.map((app) => app.id),
         featureIds: features.map((feature) => feature.id),
-        discussionTopicIds,
-        divideDiscussionIds,
-        userPermissions,
+        ...discussionSettings,
       }),
     );
   };

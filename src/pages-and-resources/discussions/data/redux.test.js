@@ -157,7 +157,7 @@ describe('Data layer integration tests', () => {
 
       await executeThunk(fetchApps(courseId), store.dispatch);
 
-      expect(store.getState().discussions).toEqual({
+      expect(store.getState().discussions).toEqual(expect.objectContaining({
         appIds: ['legacy', 'piazza', 'discourse'],
         featureIds,
         activeAppId: 'piazza',
@@ -166,7 +166,7 @@ describe('Data layer integration tests', () => {
         saveStatus: SAVED,
         hasValidationError: false,
         discussionTopicIds: [],
-      });
+      }));
       expect(store.getState().models.apps.legacy).toEqual(legacyApp);
       expect(store.getState().models.apps.piazza).toEqual(piazzaApp);
       expect(store.getState().models.features).toEqual(featuresState);
@@ -191,7 +191,7 @@ describe('Data layer integration tests', () => {
 
       await executeThunk(fetchApps(courseId), store.dispatch);
 
-      expect(store.getState().discussions).toEqual({
+      expect(store.getState().discussions).toEqual(expect.objectContaining({
         appIds: ['legacy', 'piazza', 'discourse'],
         featureIds,
         activeAppId: 'piazza',
@@ -200,7 +200,7 @@ describe('Data layer integration tests', () => {
         saveStatus: SAVED,
         hasValidationError: false,
         discussionTopicIds: [],
-      });
+      }));
       expect(store.getState().models.apps.legacy).toEqual(legacyApp);
       expect(store.getState().models.apps.piazza).toEqual(piazzaApp);
       expect(store.getState().models.features).toEqual(featuresState);
@@ -217,7 +217,7 @@ describe('Data layer integration tests', () => {
 
       await executeThunk(fetchApps(courseId), store.dispatch);
 
-      expect(store.getState().discussions).toEqual({
+      expect(store.getState().discussions).toEqual(expect.objectContaining({
         appIds: ['legacy', 'piazza'],
         featureIds,
         activeAppId: 'legacy',
@@ -227,7 +227,7 @@ describe('Data layer integration tests', () => {
         hasValidationError: false,
         discussionTopicIds,
         divideDiscussionIds,
-      });
+      }));
       expect(store.getState().models.apps.legacy).toEqual(legacyApp);
       expect(store.getState().models.apps.piazza).toEqual(piazzaApp);
       expect(store.getState().models.features).toEqual(featuresState);

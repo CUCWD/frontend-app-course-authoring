@@ -139,7 +139,7 @@ describe('DiscussionsSettings', () => {
       // content has been loaded - prior to proceeding with our expectations.
       await waitForElementToBeRemoved(screen.getByRole('status'));
 
-      userEvent.click(queryByLabelText(container, 'Select edX'));
+      userEvent.click(queryByLabelText(container, 'Select edX (Legacy)'));
       userEvent.click(queryByText(container, messages.nextButton.defaultMessage));
 
       expect(queryByTestId(container, 'appList')).not.toBeInTheDocument();

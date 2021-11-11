@@ -2,7 +2,8 @@ import React, { createRef } from 'react';
 
 import {
   act,
-  fireEvent, queryAllByText,
+  fireEvent,
+  queryAllByText,
   queryByLabelText,
   queryByRole,
   queryByTestId,
@@ -24,7 +25,7 @@ import { getAppsUrl } from '../../../data/api';
 import { fetchApps } from '../../../data/thunks';
 import { legacyApiResponse } from '../../../factories/mockApiResponses';
 import messages from '../../messages';
-import LegacyConfigForm from './LegacyConfigForm';
+import OpenedXConfigForm from './OpenedXConfigForm';
 import { selectApp } from '../../../data/slice';
 
 const courseId = 'course-v1:edX+TestX+Test_Course';
@@ -40,12 +41,16 @@ const defaultAppConfig = {
     '13f106c6-6735-4e84-b097-0456cff55960',
     'course',
   ],
+  enableGradedUnits: undefined,
+  enableInContext: undefined,
+  groupAtSubsection: false,
+  unitLevelVisibility: undefined,
   allowAnonymousPosts: false,
   allowAnonymousPostsPeers: false,
   allowDivisionByUnit: false,
   blackoutDates: [],
 };
-describe('LegacyConfigForm', () => {
+describe('OpenedXConfigForm', () => {
   let axiosMock;
   let store;
   let container;
@@ -67,13 +72,14 @@ describe('LegacyConfigForm', () => {
     axiosMock.reset();
   });
 
-  const createComponent = (onSubmit = jest.fn(), formRef = createRef()) => {
+  const createComponent = (onSubmit = jest.fn(), formRef = createRef(), legacy = true) => {
     const wrapper = render(
       <AppProvider store={store}>
         <IntlProvider locale="en">
-          <LegacyConfigForm
+          <OpenedXConfigForm
             onSubmit={onSubmit}
             formRef={formRef}
+            legacy={legacy}
           />
         </IntlProvider>
       </AppProvider>,
@@ -92,6 +98,15 @@ describe('LegacyConfigForm', () => {
     await mockStore(legacyApiResponse);
     createComponent();
     expect(container.querySelector('h3')).toHaveTextContent('edX');
+  });
+
+  test('new Open edX provider config', async () => {
+    await mockStore({ ...legacyApiResponse, enable_in_context: true });
+    createComponent(jest.fn(), createRef(), false);
+    expect(queryByText(container, messages.visibilityInContext.defaultMessage)).toBeInTheDocument();
+    expect(queryByText(container, messages.gradedUnitPagesLabel.defaultMessage)).toBeInTheDocument();
+    expect(queryByText(container, messages.groupInContextSubsectionLabel.defaultMessage)).toBeInTheDocument();
+    expect(queryByText(container, messages.allowUnitLevelVisibilityLabel.defaultMessage)).toBeInTheDocument();
   });
 
   test('calls onSubmit when the formRef is submitted', async () => {

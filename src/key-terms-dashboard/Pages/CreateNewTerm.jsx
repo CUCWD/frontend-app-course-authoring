@@ -1,6 +1,9 @@
 import { Modal, StatefulButton } from '@edx/paragon';
-import { useState, useContext } from 'react';
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import {
+  func, bool,
+} from 'prop-types';
+
 import KeyTermForm from './KeyTermForm';
 import { CourseContext } from '../KeyTermsDashboard';
 
@@ -78,8 +81,8 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
     <div>
       <Modal
         open={modalOpen}
-        title='Add New Key Term'
-        body={
+        title="Add New Key Term"
+        body={(
           <KeyTermForm
             setTermValue={setTermValue}
             setDefValue={setDefValue}
@@ -87,7 +90,7 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
             inputError={inputError}
             setInputError={setInputError}
           />
-        }
+        )}
         onClose={() => {
           setModalOpen(false);
           setSaveValue('default');
@@ -128,5 +131,15 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
     </div>
   );
 }
+
+CreateNewTerm.defaultProps = {
+  modalOpen: false,
+  setModalOpen: false,
+};
+
+CreateNewTerm.propTypes = {
+  modalOpen: bool,
+  setModalOpen: func,
+};
 
 export default CreateNewTerm;

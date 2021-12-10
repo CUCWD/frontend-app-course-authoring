@@ -1,22 +1,28 @@
 import React from 'react';
 import { Input, Form } from '@edx/paragon';
+import {
+  func, string,
+} from 'prop-types';
 
 class BulkImportForm extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   render() {
     return (
       <div>
         <p>
-          Please upload file. Make sure you've formatted your excel file
+          Please upload file. Make sure you&apos;ve formatted your excel file
           according to the TEMPLATE provided.
         </p>
         <Input
-          type='file'
+          type="file"
           onChange={(e) => {
             if (
-              e.target.files[0].type ===
-              'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+              e.target.files[0].type
+              === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             ) {
               if (e.target.files[0].size < 10000000) {
                 this.props.setIsFilePicked(true);
@@ -36,7 +42,7 @@ class BulkImportForm extends React.Component {
         />
 
         {this.props.fileError ? (
-          <Form.Control.Feedback type='invalid'>
+          <Form.Control.Feedback type="invalid">
             <p>{this.props.fileError}</p>
           </Form.Control.Feedback>
         ) : null}
@@ -44,5 +50,21 @@ class BulkImportForm extends React.Component {
     );
   }
 }
+
+BulkImportForm.defaultProps = {
+  setIsFilePicked: false,
+  setExcelFile: null,
+  setSaveValue: 'default',
+  setFileError: '',
+  fileError: '',
+};
+
+BulkImportForm.propTypes = {
+  setIsFilePicked: func,
+  setExcelFile: func,
+  setSaveValue: func,
+  setFileError: func,
+  fileError: string,
+};
 
 export default BulkImportForm;

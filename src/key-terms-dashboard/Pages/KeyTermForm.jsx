@@ -1,5 +1,8 @@
 import React from 'react';
 import { InputText, Form } from '@edx/paragon';
+import {
+  func, bool, shape,
+} from 'prop-types';
 
 const emptyForm = {
   keyTerm: '',
@@ -7,7 +10,10 @@ const emptyForm = {
 };
 
 class KeyTermForm extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   componentDidMount() {
     this.setState(emptyForm);
@@ -27,9 +33,9 @@ class KeyTermForm extends React.Component {
           definitions after the key term is created.
         </p>
         <InputText
-          id='keyTerm'
-          name='keyTerm'
-          label='Key Term'
+          id="keyTerm"
+          name="keyTerm"
+          label="Key Term"
           onChange={(input) => {
             this.value = input;
             this.props.setTermValue(this.value);
@@ -41,7 +47,7 @@ class KeyTermForm extends React.Component {
           }}
         />
         {this.props.inputError.keyTerm ? (
-          <Form.Control.Feedback type='invalid'>
+          <Form.Control.Feedback type="invalid">
             Key Term cannot be blank
             <br />
             &nbsp;
@@ -49,9 +55,9 @@ class KeyTermForm extends React.Component {
         ) : null}
 
         <InputText
-          id='definition'
-          name='definition'
-          label='Definition'
+          id="definition"
+          name="definition"
+          label="Definition"
           //   value={this.state.definition}
           onChange={(input) => {
             this.value = input;
@@ -64,7 +70,7 @@ class KeyTermForm extends React.Component {
           }}
         />
         {this.props.inputError.definition ? (
-          <Form.Control.Feedback type='invalid'>
+          <Form.Control.Feedback type="invalid">
             Definition cannot be blank
           </Form.Control.Feedback>
         ) : null}
@@ -72,5 +78,30 @@ class KeyTermForm extends React.Component {
     );
   }
 }
+
+KeyTermForm.defaultProps = {
+  setTermValue: '',
+  setSaveValue: 'default',
+  setInputError: {
+    keyTerm: false,
+    definition: false,
+  },
+  inputError: {
+    keyTerm: false,
+    definition: false,
+  },
+  setDefValue: '',
+};
+
+KeyTermForm.propTypes = {
+  setTermValue: func,
+  setSaveValue: func,
+  setInputError: func,
+  inputError: shape({
+    keyTerm: bool,
+    definition: bool,
+  }),
+  setDefValue: func,
+};
 
 export default KeyTermForm;

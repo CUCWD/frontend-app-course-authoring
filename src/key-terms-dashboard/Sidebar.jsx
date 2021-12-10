@@ -1,20 +1,17 @@
-import React, { useContext } from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
 import './KeyTermsDashboard.scss';
 
-import BulkImport from './Pages/BulkImport';
-import DragAndDrop from './Pages/DragAndDrop';
-import BulkImportValidator from './Pages/BulkImportValidator';
-import CreateNewTerm from './Pages/CreateNewTerm';
-
 import { Button } from '@edx/paragon';
-
 import { FontAwesomeIcon } from '@edx/paragon/node_modules/@fortawesome/react-fontawesome';
 import {
   faCloudUploadAlt,
   faFileDownload,
 } from '@edx/paragon/node_modules/@fortawesome/free-solid-svg-icons';
-import { CourseContext } from './KeyTermsDashboard';
+import BulkImport from './Pages/BulkImport';
+import DragAndDrop from './Pages/DragAndDrop';
+import BulkImportValidator from './Pages/BulkImportValidator';
+import CreateNewTerm from './Pages/CreateNewTerm';
 
 function BulkUploadDrop() {
   const [fileDrop, setFileDrop] = useState('');
@@ -23,13 +20,11 @@ function BulkUploadDrop() {
   const [bulkImportModal, setBulkImportModal] = useState(false);
   const [fileError, setFileError] = useState('');
 
-  const { courseId, termData } = useContext(CourseContext);
-
   const handleDrop = (files) => {
-    if (!files[0].name) return;
+    if (!files[0].name) { return; }
     if (
-      files[0].type !==
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      files[0].type
+      !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     ) {
       setFileError('File must be .xlsx format');
       return;
@@ -47,7 +42,7 @@ function BulkUploadDrop() {
   return (
     <DragAndDrop handleDrop={handleDrop}>
       <br />
-      <FontAwesomeIcon icon={faCloudUploadAlt} size='3x' />
+      <FontAwesomeIcon icon={faCloudUploadAlt} size="3x" />
       <br />
       <b>
         Drag and Drop
@@ -57,8 +52,8 @@ function BulkUploadDrop() {
       </b>
 
       <Button
-        variant='outline-primary'
-        size='sm'
+        variant="outline-primary"
+        size="sm"
         onClick={() => {
           setBulkImportModal(true);
         }}
@@ -66,7 +61,7 @@ function BulkUploadDrop() {
         Browse Your <br /> Computer
       </Button>
 
-      <p className='drag-n-drop'>
+      <p className="drag-n-drop">
         <i>
           Maximum file size:
           <br />
@@ -74,7 +69,7 @@ function BulkUploadDrop() {
         </i>
       </p>
 
-      {fileError !== '' ? <p className='error-message'>{fileError}</p> : null}
+      {fileError !== '' ? <p className="error-message">{fileError}</p> : null}
 
       {validateModal === true ? (
         <BulkImportValidator
@@ -98,10 +93,10 @@ function Sidebar() {
   const [newTermModal, setNewTermModal] = useState(false);
 
   return (
-    <div className='sidebar'>
-      <div className='create-key-term'>
+    <div className="sidebar">
+      <div className="create-key-term">
         <Button
-          className='mb-3'
+          className="mb-3"
           onClick={() => {
             setNewTermModal(true);
           }}
@@ -115,16 +110,16 @@ function Sidebar() {
           />
         ) : null}
       </div>
-      <div className='bulk-insert-container'>
-        <div className='drag-n-drop'>
+      <div className="bulk-insert-container">
+        <div className="drag-n-drop">
           <BulkUploadDrop />
         </div>
-        <div className='terms-template'>
+        <div className="terms-template">
           <a
-            href='http://localhost:18500/static/KEYTERM-TEMPLATE.xlsx'
+            href="http://localhost:18500/static/KEYTERM-TEMPLATE.xlsx"
             download
           >
-            <FontAwesomeIcon icon={faFileDownload} size='sm' />
+            <FontAwesomeIcon icon={faFileDownload} size="sm" />
             &nbsp;&nbsp; Download Template{' '}
           </a>
           <p>

@@ -1,5 +1,7 @@
-import React, { createContext } from 'react';
-import { useState, useEffect, useContext } from 'react';
+import React, {
+  createContext, useState, useEffect, useContext,
+} from 'react';
+
 import './KeyTermsDashboard.scss';
 
 import {
@@ -13,11 +15,12 @@ import {
   Pagination,
 } from '@edx/paragon';
 import { injectIntl } from '@edx/frontend-platform/i18n';
+import {
+  Delete, Edit, ExpandLess, ExpandMore,
+} from '@edx/paragon/icons';
 import Header from '../studio-header/Header';
 import EditKeyTerm from './Pages/EditKeyTerm';
 import Sidebar from './Sidebar';
-
-import { Delete, Edit, ExpandLess, ExpandMore } from '@edx/paragon/icons';
 
 export const CourseContext = createContext();
 export const KeyTermContext = createContext();
@@ -27,33 +30,32 @@ const paginationLength = 15;
 function ResourceList() {
   const { resources } = useContext(KeyTermContext);
   return (
-    <div className='ref-container flex-col'>
+    <div className="ref-container flex-col">
       <b>References:</b>
-      {resources.map(function (resource) {
-        return (
-          <p>
-            <a target="_blank" rel="noopener noreferrer" href={resource.resource_link}>{resource.friendly_name}</a>
-          </p>
-        );
-      })}
+      {resources.map((resource) => (
+        <p>
+          <a target="_blank" rel="noopener noreferrer" href={resource.resource_link}>{resource.friendly_name}</a>
+        </p>
+      ))}
     </div>
   );
 }
 
 function Lessons() {
   const { lessons } = useContext(KeyTermContext);
+
   // Sorting list by module name then by lesson name
-  lessons.sort((a, b) => a.module_name === b.module_name ? (a.lesson_name > b.lesson_name ? 1: -1) : (a.module_name > b.module_name ? 1: -1))
-  
+  lessons.sort((a, b) => (a.module_name === b.module_name
+    ? (a.lesson_name > b.lesson_name ? 1 : -1)
+    : (a.module_name > b.module_name ? 1 : -1)));
+
   return (
-    <div className='lessons-container flex-col'>
+    <div className="lessons-container flex-col">
       <b>Lessons</b>
-      { 
-      lessons.map(function (lesson) {
-        return (
-          <Lesson key={lesson.id} lesson={lesson} />
-        );
-      }) 
+      {
+      lessons.map((lesson) => (
+        <Lesson key={lesson.id} lesson={lesson} />
+      ))
       }
     </div>
   );
@@ -62,7 +64,7 @@ function Lessons() {
 // Gets a specific textbook
 function Lesson({ lesson }) {
   const { courseId } = useContext(CourseContext);
-  const encodedCourse = courseId.replace(" ", "+");
+  const encodedCourse = courseId.replace(' ', '+');
   return (
     <p>
       <a key={lesson.id} target="_blank" rel="noopener noreferrer" href={`http://localhost:2000/course/${encodedCourse}/${lesson.lesson_link}`}> {lesson.module_name}&gt;{lesson.lesson_name}&gt;{lesson.unit_name}</a> &nbsp; &nbsp;
@@ -84,8 +86,8 @@ function Textbook({ textbook }) {
       {textbook.chapter} pg. {textbook.page_num} &nbsp; &nbsp;
       <Button
         variant={variant}
-        size='inline'
-        title='Copy Link'
+        size="inline"
+        title="Copy Link"
         onClick={() => {
           navigator.clipboard.writeText(lmsTextbookLink);
           setVariant('light');
@@ -102,13 +104,11 @@ function Textbook({ textbook }) {
 function TextbookList() {
   const { textbooks } = useContext(KeyTermContext);
   return (
-    <div className='textbook-container flex-col'>
+    <div className="textbook-container flex-col">
       <b>Textbooks</b>
-      {textbooks.map(function (textbook) {
-        return (
-          <Textbook key={textbook.id} textbook={textbook} />
-        );
-      })}
+      {textbooks.map((textbook) => (
+        <Textbook key={textbook.id} textbook={textbook} />
+      ))}
     </div>
   );
 }
@@ -116,22 +116,20 @@ function TextbookList() {
 function DefinitionsList() {
   const { definitions } = useContext(KeyTermContext);
   return (
-    <div className='definitions-container flex-col'>
+    <div className="definitions-container flex-col">
       <b>Definitions</b>
-      {definitions.map(function (descr) {
-        return (
-          <div className='definition'>
-            <p>{descr.description}</p>
-          </div>
-        );
-      })}
+      {definitions.map((descr) => (
+        <div className="definition">
+          <p>{descr.description}</p>
+        </div>
+      ))}
     </div>
   );
 }
 
 function KeyTermData() {
   return (
-    <div className='key-term-info'>
+    <div className="key-term-info">
       <DefinitionsList />
       <TextbookList />
       <Lessons />
@@ -140,21 +138,21 @@ function KeyTermData() {
   );
 }
 
-function KeyTerm({index}) {
+function KeyTerm({ index }) {
   const { key_name } = useContext(KeyTermContext);
   const { courseId } = useContext(CourseContext);
   const [editTermModal, setEditTermModal] = useState(false);
 
   async function DeleteKeyTerm() {
-    const restUrl = `http://localhost:18500/api/v1/key_term/`;
+    const restUrl = 'http://localhost:18500/api/v1/key_term/';
     const course = courseId.replaceAll('+', ' ');
     const termToDelete = {
-      key_name: key_name,
+      key_name,
       course_id: course,
     };
 
     if (
-      confirm(`Are you sure you want to remove key term ${key_name} from this course?`)
+      window.confirm(`Are you sure you want to remove key term ${key_name} from this course?`)
     ) {
       const response = await fetch(restUrl, {
         method: 'DELETE',
@@ -176,10 +174,11 @@ function KeyTerm({index}) {
   }
 
   return (
-    <div className='key-term-container'>
-      <Collapsible style={ index % 2 ? { backgroundColor: "#d4d4d4" }:{ backgroundColor: "white" }}
+    <div className="key-term-container">
+      <Collapsible
+        style={index % 2 ? { backgroundColor: '#d4d4d4' } : { backgroundColor: 'white' }}
         title={<b>{key_name}</b>}
-        styling='card-lg'
+        styling="card-lg"
         iconWhenOpen={<Icon src={ExpandLess} />}
         iconWhenClosed={<Icon src={ExpandMore} />}
       >
@@ -193,9 +192,9 @@ function KeyTerm({index}) {
           <IconButton
             src={Edit}
             iconAs={Icon}
-            alt='Edit'
-            variant='secondary'
-            size='sm'
+            alt="Edit"
+            variant="secondary"
+            size="sm"
             onClick={() => {
               setEditTermModal(true);
             }}
@@ -203,9 +202,9 @@ function KeyTerm({index}) {
           <IconButton
             src={Delete}
             iconAs={Icon}
-            alt='Delete'
-            variant='secondary'
-            size='sm'
+            alt="Delete"
+            variant="secondary"
+            size="sm"
             onClick={() => {
               DeleteKeyTerm();
             }}
@@ -218,14 +217,13 @@ function KeyTerm({index}) {
 }
 
 function KeyTermList() {
-
   const { searchQuery, selectedPage, setPagination } = useContext(ListViewContext);
   const { courseId, termData, setTermData } = useContext(CourseContext);
 
   function paginate(termList, page_size, page_number) {
     return termList.slice(
       (page_number - 1) * page_size,
-      page_number * page_size
+      page_number * page_size,
     );
   }
 
@@ -242,17 +240,15 @@ function KeyTermList() {
         // handle your errors here
         console.error(error);
       });
-  }, []);
+  });
 
   const displayTerms = termData
-    .filter(function (keyTerm) {
-      return keyTerm.key_name
-        .toString()
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) || 
-        keyTerm.definitions.find(function(object) {return object.description.toLowerCase().includes(searchQuery.toLowerCase())}) !== undefined;
-    })
-    .sort(function compare(a, b) {
+    .filter((keyTerm) => keyTerm.key_name
+      .toString()
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+      || keyTerm.definitions.find((object) => object.description.toLowerCase().includes(searchQuery.toLowerCase())) !== undefined)
+    .sort((a, b) => {
       if (a.key_name < b.key_name) {
         return -1;
       }
@@ -269,23 +265,20 @@ function KeyTermList() {
   }
 
   return (
-    <div className='key-term_list'>
+    <div className="key-term_list">
       {displayTerms.length === 0 ? (
-        <h3 className='filter-container'>No Terms to Display...</h3>
+        <h3 className="filter-container">No Terms to Display...</h3>
       ) : null}
-      {paginate(displayTerms, paginationLength, selectedPage).map((keyTerm, index)=> {
-        return (
-          <KeyTermContext.Provider value={keyTerm}>
-            <KeyTerm index={index} key={keyTerm.id} />
-          </KeyTermContext.Provider>
-        );
-      })}
+      {paginate(displayTerms, paginationLength, selectedPage).map((keyTerm, index) => (
+        <KeyTermContext.Provider value={keyTerm}>
+          <KeyTerm index={index} key={keyTerm.id} />
+        </KeyTermContext.Provider>
+      ))}
     </div>
   );
 }
 
 function KeyTermsDashboard({ courseId }) {
-
   const [searchQuery, setSearchQuery] = useState('');
   const [termData, setTermData] = useState([]);
   const [selectedPage, setSelectedPage] = useState(1);
@@ -294,25 +287,25 @@ function KeyTermsDashboard({ courseId }) {
 
   return (
     <CourseContext.Provider value={{ courseId, termData, setTermData }}>
-      <Header courseId={courseId} courseTitle='Demo: Basic Robotics' />
-      <Container size='xl'>
-        <div className='header'>
-          <h2 className='mt-3 mb-2'>Studio: Key Term Dashboard</h2>
+      <Header courseId={courseId} courseTitle="Demo: Basic Robotics" />
+      <Container size="xl">
+        <div className="header">
+          <h2 className="mt-3 mb-2">Studio: Key Term Dashboard</h2>
           <hr />
         </div>
-        <div className='dashboard-container'>
+        <div className="dashboard-container">
           <Sidebar />
-          <div className='key-term-list-container'>
-            <div className='menu-bar'>
+          <div className="key-term-list-container">
+            <div className="menu-bar">
               <ActionRow>
-              <p>
-                Displaying {pagination > 0 ? 1 + paginationLength * (selectedPage - 1) : 0}
-                            -
-                            {pagination * paginationLength < paginationLength
-                              ? parseInt(pagination * paginationLength)
-                              : paginationLength * selectedPage}{' '}
-                            of {parseInt(pagination * paginationLength)} items
-              </p>
+                <p>
+                  Displaying {pagination > 0 ? 1 + paginationLength * (selectedPage - 1) : 0}
+                  -
+                  {pagination * paginationLength < paginationLength
+                    ? parseInt(pagination * paginationLength)
+                    : paginationLength * selectedPage}{' '}
+                  of {parseInt(pagination * paginationLength)} items
+                </p>
                 {/* <p>
                 <a
                   onClick={() => {
@@ -328,17 +321,20 @@ function KeyTermsDashboard({ courseId }) {
                     setSearchQuery(value);
                   }}
                   onClear={() => setSearchQuery('')}
-                  placeholder='Search'
+                  placeholder="Search"
                 />
               </ActionRow>
             </div>
-            <ListViewContext.Provider value={{searchQuery, selectedPage, setPagination, expandAll, setExpandAll}}>
-              <KeyTermList  />
+            <ListViewContext.Provider value={{
+              searchQuery, selectedPage, setPagination, expandAll, setExpandAll,
+            }}
+            >
+              <KeyTermList />
             </ListViewContext.Provider>
-            <div className='footer-container'>
+            <div className="footer-container">
               {pagination === 0 ? null : (
                 <Pagination
-                  paginationLabel='pagination navigation'
+                  paginationLabel="pagination navigation"
                   pageCount={
                     pagination > parseInt(pagination)
                       ? parseInt(pagination) + 1

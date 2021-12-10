@@ -1,6 +1,7 @@
 import { Modal, StatefulButton } from '@edx/paragon';
-import { useState } from 'react';
-import React from 'react';
+import { bool, func } from 'prop-types';
+import React, { useState } from 'react';
+
 import BulkImportForm from './BulkImportForm';
 
 import BulkImportValidator from './BulkImportValidator';
@@ -25,8 +26,8 @@ function BulkImport({ modalOpen, setModalOpen }) {
     <div>
       <Modal
         open={modalOpen}
-        title='Bulk Import Key Terms'
-        body={
+        title="Bulk Import Key Terms"
+        body={(
           <BulkImportForm
             setExcelFile={setExcelFile}
             isFilePicked={isFilePicked}
@@ -35,7 +36,7 @@ function BulkImport({ modalOpen, setModalOpen }) {
             fileError={fileError}
             setSaveValue={setSaveValue}
           />
-        }
+        )}
         onClose={() => {
           setModalOpen(false);
           setSaveValue('default');
@@ -45,7 +46,7 @@ function BulkImport({ modalOpen, setModalOpen }) {
           <StatefulButton
             // variant='success'
             state={saveValue}
-            label='Upload'
+            label="Upload"
             {...props}
             // data-autofocus
             onClick={() => {
@@ -71,5 +72,15 @@ function BulkImport({ modalOpen, setModalOpen }) {
     </div>
   );
 }
+
+BulkImport.defaultProps = {
+  modalOpen: 'false',
+  setModalOpen: 'false',
+};
+
+BulkImport.propTypes = {
+  modalOpen: bool,
+  setModalOpen: func,
+};
 
 export default BulkImport;

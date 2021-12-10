@@ -1,6 +1,6 @@
-function DeleteKeyTerm({ keyName }) {
+function DeleteKeyTerm({ key_name }) {
   window.confirm('Are you sure?');
-  console.log(keyName);
+  console.log(key_name);
 }
 
 export default DeleteKeyTerm;

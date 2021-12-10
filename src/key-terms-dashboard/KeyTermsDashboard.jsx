@@ -140,7 +140,7 @@ function KeyTermData() {
 
 function KeyTerm({ index }) {
   const { key_name } = useContext(KeyTermContext);
-  const { courseId } = useContext(CourseContext);
+  const { courseId, setUpdate } = useContext(CourseContext);
   const [editTermModal, setEditTermModal] = useState(false);
 
   async function DeleteKeyTerm() {
@@ -164,6 +164,7 @@ function KeyTerm({ index }) {
         .then((data) => {
           console.log('Success:', data);
           console.log(JSON.stringify(termToDelete));
+          setUpdate(data);
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -218,7 +219,7 @@ function KeyTerm({ index }) {
 
 function KeyTermList() {
   const { searchQuery, selectedPage, setPagination } = useContext(ListViewContext);
-  const { courseId, termData, setTermData } = useContext(CourseContext);
+  const { courseId, termData, setTermData, update, setUpdate } = useContext(CourseContext);
 
   function paginate(termList, page_size, page_number) {
     return termList.slice(
@@ -240,7 +241,7 @@ function KeyTermList() {
         // handle your errors here
         console.error(error);
       });
-  });
+  }, [setTermData, update]);
 
   const displayTerms = termData
     .filter((keyTerm) => keyTerm.key_name
@@ -281,12 +282,13 @@ function KeyTermList() {
 function KeyTermsDashboard({ courseId }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [termData, setTermData] = useState([]);
+  const [update, setUpdate] = useState('');
   const [selectedPage, setSelectedPage] = useState(1);
   const [pagination, setPagination] = useState();
   const [expandAll, setExpandAll] = useState(false);
 
   return (
-    <CourseContext.Provider value={{ courseId, termData, setTermData }}>
+    <CourseContext.Provider value={{ courseId, termData, setTermData, update, setUpdate }}>
       <Header courseId={courseId} courseTitle="Demo: Basic Robotics" />
       <Container size="xl">
         <div className="header">

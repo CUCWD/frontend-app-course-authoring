@@ -6,10 +6,11 @@ import {
 
 import EditKeyTermForm from './EditKeyTermForm';
 
-import { KeyTermContext } from '../KeyTermsDashboard';
+import { KeyTermContext, CourseContext } from '../KeyTermsDashboard';
 
 function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
-  const { keyName, definitions, resources } = useContext(KeyTermContext);
+  const { key_name, definitions, resources } = useContext(KeyTermContext);
+  const { setUpdate } = useContext(CourseContext);
   const keyTerm = useContext(KeyTermContext);
   const [saveValue, setSaveValue] = useState('default');
   const [definitionList, setDefinitionList] = useState(definitions);
@@ -29,7 +30,7 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
   async function EditTerm() {
     const restUrl = 'http://localhost:18500/api/v1/key_term/';
     const editTerm = {
-      keyName,
+      key_name,
       course_id: course,
       definitions: definitionList,
       textbooks: [],
@@ -55,12 +56,12 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
         } else {
           setSaveValue('error');
         }
+        setUpdate(data);
       })
       .catch((error) => {
         console.error('Error:', error);
         setSaveValue('error');
       });
-
     return response;
   }
 

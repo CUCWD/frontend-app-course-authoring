@@ -278,7 +278,7 @@ function BulkImportValidator({
     mergeAll: false,
   });
 
-  const { courseId, termData } = useContext(CourseContext);
+  const { courseId, termData, setUpdate } = useContext(CourseContext);
 
   const props = {
     labels: {
@@ -309,6 +309,7 @@ function BulkImportValidator({
         } else {
           setSaveValue('error');
         }
+        setUpdate(data);
       })
       .catch((error) => {
         console.error('Error:', error);

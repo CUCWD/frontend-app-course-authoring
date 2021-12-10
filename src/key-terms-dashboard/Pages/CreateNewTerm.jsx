@@ -8,6 +8,7 @@ import KeyTermForm from './KeyTermForm';
 import { CourseContext } from '../KeyTermsDashboard';
 
 function CreateNewTerm({ modalOpen, setModalOpen }) {
+  const { setUpdate } = useContext(CourseContext);
   const [termValue, setTermValue] = useState('');
   const [defValue, setDefValue] = useState('');
   const [saveValue, setSaveValue] = useState('default');
@@ -68,6 +69,7 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
         } else {
           setSaveValue('error');
         }
+        setUpdate(data);
       })
       .catch((error) => {
         console.error('Error:', error);

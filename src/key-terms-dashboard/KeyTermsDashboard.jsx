@@ -177,7 +177,7 @@ function KeyTerm({ index }) {
   return (
     <div className="key-term-container">
       <Collapsible
-        style={index % 2 ? { backgroundColor: '#d4d4d4' } : { backgroundColor: 'white' }}
+        style={index % 2 ? { backgroundColor: '#ededed' } : { backgroundColor: 'white' }}
         title={<b>{key_name}</b>}
         styling="card-lg"
         iconWhenOpen={<Icon src={ExpandLess} />}

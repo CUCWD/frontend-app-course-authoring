@@ -4,6 +4,7 @@ import React from 'react';
 
 export default function Loading() {
   return (
+  /*
     <div
       className="d-flex justify-content-center align-items-center flex-column"
       style={{
@@ -20,5 +21,7 @@ export default function Loading() {
         </span>
       </Spinner>
     </div>
+    */
+    <></>
   );
 }

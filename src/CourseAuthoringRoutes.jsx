@@ -4,6 +4,7 @@ import { Switch, useRouteMatch } from 'react-router';
 import { PageRoute } from '@edx/frontend-platform/react';
 
 import CourseAuthoringPage from './CourseAuthoringPage';
+import KeyTermsDashboard from './key-terms-dashboard/KeyTermsDashboard';
 import { PagesAndResources } from './pages-and-resources';
 import ProctoredExamSettings from './proctored-exam-settings/ProctoredExamSettings';
 
@@ -32,6 +33,9 @@ export default function CourseAuthoringRoutes({ courseId }) {
         </PageRoute>
         <PageRoute path={`${path}/proctored-exam-settings`}>
           <ProctoredExamSettings courseId={courseId} />
+        </PageRoute>
+        <PageRoute path={`${path}/key-terms-dashboard`}>
+          <KeyTermsDashboard courseId={courseId} />
         </PageRoute>
       </Switch>
     </CourseAuthoringPage>

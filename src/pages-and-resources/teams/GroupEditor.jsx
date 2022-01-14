@@ -4,6 +4,7 @@ import {
 } from '@edx/paragon';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { getConfig } from '@edx/frontend-platform';
 import { GroupTypes, TeamSizes } from '../../data/constants';
 
 import CollapsableEditor from '../../generic/CollapsableEditor';
@@ -33,6 +34,7 @@ function GroupEditor({
   const [isOpen, setOpen] = useState(group.id === null);
   const initiateDeletion = () => setDeleting(true);
   const cancelDeletion = () => setDeleting(false);
+  const showTeamTypeSetting = getConfig().ENABLE_TEAM_TYPE_SETTING;
 
   const handleToggle = (open) => setOpen(Boolean(errors.name || errors.maxTeamSize || errors.description) || open);
   const handleFocus = (e) => setFieldError(e.target.name, undefined);
@@ -81,36 +83,24 @@ function GroupEditor({
                 )
             }
           >
-            <Form.Group className={`${formGroupClasses} mt-2.5`}>
-              <Form.Control
-                className="pb-2"
-                name={`${fieldNameCommonBase}.name`}
-                floatingLabel={intl.formatMessage(messages.groupFormNameLabel)}
-                defaultValue={group.name}
-                onChange={onChange}
-                onBlur={onBlur}
-                onFocus={handleFocus}
-              />
-              <FormikErrorFeedback name={`${fieldNameCommonBase}.name`}>
-                <Form.Text>{intl.formatMessage(messages.groupFormNameHelp)}</Form.Text>
-              </FormikErrorFeedback>
-            </Form.Group>
-            <Form.Group className={formGroupClasses}>
-              <Form.Control
-                className="pb-2"
-                as="textarea"
-                rows={4}
-                name={`${fieldNameCommonBase}.description`}
-                floatingLabel={intl.formatMessage(messages.groupFormDescriptionLabel)}
-                defaultValue={group.description}
-                onChange={onChange}
-                onBlur={onBlur}
-                onFocus={handleFocus}
-              />
-              <FormikErrorFeedback name={`${fieldNameCommonBase}.description`}>
-                <Form.Text>{intl.formatMessage(messages.groupFormDescriptionHelp)}</Form.Text>
-              </FormikErrorFeedback>
-            </Form.Group>
+            <FormikControl
+              name={`${fieldNameCommonBase}.name`}
+              value={group.name}
+              floatingLabel={intl.formatMessage(messages.groupFormNameLabel)}
+              help={intl.formatMessage(messages.groupFormNameHelp)}
+              className={`${formGroupClasses} mt-2.5`}
+            />
+            <FormikControl
+              name={`${fieldNameCommonBase}.description`}
+              value={group.description}
+              floatingLabel={intl.formatMessage(messages.groupFormDescriptionLabel)}
+              help={intl.formatMessage(messages.groupFormDescriptionHelp)}
+              as="textarea"
+              rows={4}
+              style={{ minHeight: '2.5rem' }}
+              className={formGroupClasses}
+            />
+            {showTeamTypeSetting && (
             <Form.Group className={formGroupClasses}>
               <Form.Label className="h4 my-3">
                 {intl.formatMessage(messages.groupFormTypeLabel)}
@@ -135,22 +125,17 @@ function GroupEditor({
                 ))}
               </Form.RadioSet>
             </Form.Group>
-            <Form.Group className="mx-2">
-              <Form.Label className="h4 pb-4">{intl.formatMessage(messages.teamSize)}</Form.Label>
-              <Form.Control
-                type="number"
-                name={`${fieldNameCommonBase}.maxTeamSize`}
-                floatingLabel={intl.formatMessage(messages.groupFormMaxSizeLabel)}
-                value={group.maxTeamSize}
-                placeholder={TeamSizes.DEFAULT}
-                onChange={onChange}
-                onBlur={onBlur}
-                onFocus={handleFocus}
-              />
-              <FormikErrorFeedback name={`${fieldNameCommonBase}.maxTeamSize`}>
-                <Form.Text>{intl.formatMessage(messages.groupFormMaxSizeHelp)}</Form.Text>
-              </FormikErrorFeedback>
-            </Form.Group>
+            )}
+            <FormikControl
+              type="number"
+              name={`${fieldNameCommonBase}.maxTeamSize`}
+              floatingLabel={intl.formatMessage(messages.groupFormMaxSizeLabel)}
+              value={group.maxTeamSize}
+              help={intl.formatMessage(messages.groupFormMaxSizeHelp)}
+              label={<Form.Label className="h4 pb-4">{intl.formatMessage(messages.teamSize)}</Form.Label>}
+              className="mx-2"
+              placeholder={TeamSizes.DEFAULT}
+            />
           </CollapsableEditor>
         )}
     </TransitionReplace>

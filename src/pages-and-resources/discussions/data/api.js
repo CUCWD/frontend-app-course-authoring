@@ -14,6 +14,7 @@ import {
   endOfDayTime,
 } from '../app-config-form/utils';
 import { blackoutDatesStatus as constants } from './constants';
+import { DivisionSchemes } from '../../../data/constants';
 
 ensureConfig([
   'STUDIO_BASE_URL',
@@ -63,6 +64,7 @@ function normalizePluginConfig(data) {
   return {
     allowAnonymousPosts: data.allow_anonymous,
     allowAnonymousPostsPeers: data.allow_anonymous_to_peers,
+    divisionScheme: data.division_scheme,
     blackoutDates: normalizeBlackoutDates(data.discussion_blackouts),
     allowDivisionByUnit: false,
     divideByCohorts: discussionDividedTopicsCount > 0,
@@ -72,7 +74,7 @@ function normalizePluginConfig(data) {
 
 function normalizePiiSharing(data) {
   return {
-    piiSharing: 'pii_share_username' in data || 'pii_share_email' in data,
+    piiSharing: data.pii_sharing_allowed,
     piiShareUsername: data.pii_share_username,
     piiShareEmail: data.pii_share_email,
   };
@@ -94,7 +96,8 @@ function normalizeAppConfig(data) {
       ...normalizeLtiConfig(data.lti_configuration),
     };
   }
-  return [legacyConfig, ltiConfig, piiConfig];
+  if (!_.isEmpty(ltiConfig)) { return [legacyConfig, ltiConfig, piiConfig]; }
+  return [legacyConfig, piiConfig];
 }
 
 function normalizeDiscussionTopic(data) {
@@ -174,6 +177,9 @@ function denormalizeData(courseId, appId, data) {
   }
   if ('allowAnonymousPostsPeers' in data) {
     pluginConfiguration.allow_anonymous_to_peers = data.allowAnonymousPostsPeers;
+  }
+  if ('divideByCohorts' in data) {
+    pluginConfiguration.division_scheme = data.divideByCohorts ? DivisionSchemes.COHORT : DivisionSchemes.NONE;
   }
   if (data.blackoutDates?.length) {
     pluginConfiguration.discussion_blackouts = data.blackoutDates.map((blackoutDates) => (

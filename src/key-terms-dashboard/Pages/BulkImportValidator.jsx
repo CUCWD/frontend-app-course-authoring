@@ -430,6 +430,7 @@ function BulkImportValidator({
         newRow['definitions'] = definitionList;
         newRow['resources'] = resourceList;
         newRow['textbooks'] = [];
+        newRow['lessons'] = [];
         newData.push(newRow);
       }
 

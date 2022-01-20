@@ -48,6 +48,7 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
       definitions: [{ description: defValue }],
       textbooks: [],
       resources: [],
+      lessons: [],
     };
 
     console.log(newTerm);

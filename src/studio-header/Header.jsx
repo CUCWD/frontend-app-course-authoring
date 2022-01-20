@@ -86,7 +86,7 @@ function Header({
           <div className='mb-1'>
             <a
               rel='noopener'
-              href={`${config.BASE_URL}/course/${courseId}/key-terms-dashboard`}
+              href={`/course/${courseId}/key-terms-dashboard`}
             >
               {intl.formatMessage(messages['header.links.keyterms'])}
             </a>

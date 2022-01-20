@@ -24,6 +24,7 @@ import Sidebar from './Sidebar';
 export const CourseContext = createContext();
 export const KeyTermContext = createContext();
 const ListViewContext = createContext();
+const paginationLength = 15;
 
 function ResourceList() {
   const { resources } = useContext(KeyTermContext);
@@ -33,7 +34,13 @@ function ResourceList() {
       {resources.map(function (resource) {
         return (
           <p>
-            <a href={resource.resource_link}>{resource.friendly_name}</a>
+            <a
+              target='_blank'
+              rel='noopener noreferrer'
+              href={resource.resource_link}
+            >
+              {resource.friendly_name}
+            </a>
           </p>
         );
       })}
@@ -42,10 +49,36 @@ function ResourceList() {
 }
 
 function Lessons() {
+  const { lessons } = useContext(KeyTermContext);
+  // Sorting list by module name then by lesson name
+  lessons.sort((a, b) =>
+    a.module_name === b.module_name
+      ? a.lesson_name > b.lesson_name
+        ? 1
+        : -1
+      : a.module_name > b.module_name
+      ? 1
+      : -1
+  );
+
   return (
     <div className='lessons-container flex-col'>
       <b>Lessons</b>
+      {lessons.map(function (lesson) {
+        return <Lesson key={lesson.id} lesson={lesson} />;
+      })}
     </div>
+  );
+}
+
+// Gets a specific lesson
+function Lesson({ lesson }) {
+  const { courseId } = useContext(CourseContext);
+  const encodedCourse = courseId.replace(" ", "+");
+  return (
+    <p>
+      <a key={lesson.id} target="_blank" rel="noopener noreferrer" href={`http://localhost:2000/course/${encodedCourse}/${lesson.lesson_link}`}> {lesson.module_name}&gt;{lesson.lesson_name}&gt;{lesson.unit_name}</a> &nbsp; &nbsp;
+    </p>
   );
 }
 
@@ -118,23 +151,21 @@ function KeyTermData() {
 }
 
 function KeyTerm() {
-  const { keyName } = useContext(KeyTermContext);
-  // const { expandAll, setExpandAll } = useContext(ListViewContext);
+  const { key_name } = useContext(KeyTermContext);
   const { courseId } = useContext(CourseContext);
   const [editTermModal, setEditTermModal] = useState(false);
-  // const [isOpen, setIsOpen] = useState(expandAll);
 
   async function DeleteKeyTerm() {
     const restUrl = 'http://localhost:18500/api/v1/key_term/';
     const course = courseId.replaceAll('+', ' ');
     const termToDelete = {
-      key_name: keyName,
+      key_name: key_name,
       course_id: course,
     };
 
     if (
       confirm(
-        `Are you sure you want to remove key term ${keyName} from this course?`
+        `Are you sure you want to remove key term ${key_name} from this course?`
       )
     ) {
       const response = await fetch(restUrl, {
@@ -159,17 +190,15 @@ function KeyTerm() {
   return (
     <div className='key-term-container'>
       <Collapsible
+        style={
+          index % 2
+            ? { backgroundColor: '#d4d4d4' }
+            : { backgroundColor: 'white' }
+        }
         title={<b>{key_name}</b>}
         styling='card-lg'
-        // open={isOpen}
-        // onClick={() =>
-        //   {setIsOpen(!isOpen);
-        //   console.log(expandAll);}
-        // }
         iconWhenOpen={<Icon src={ExpandLess} />}
         iconWhenClosed={<Icon src={ExpandMore} />}
-        // if false, won't allow any individual collapsable to open
-        // open={expandAll}
       >
         <span>
           <EditKeyTerm
@@ -234,10 +263,17 @@ function KeyTermList() {
 
   const displayTerms = termData
     .filter(function (keyTerm) {
-      return keyTerm.key_name
-        .toString()
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      return (
+        keyTerm.key_name
+          .toString()
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        keyTerm.definitions.find(function (object) {
+          return object.description
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase());
+        }) !== undefined
+      );
     })
     .sort(function compare(a, b) {
       if (a.key_name < b.key_name) {
@@ -252,7 +288,7 @@ function KeyTermList() {
   if (displayTerms.length === 0) {
     setPagination(0);
   } else {
-    setPagination(displayTerms.length / 50);
+    setPagination(displayTerms.length / paginationLength);
   }
 
   return (
@@ -260,13 +296,15 @@ function KeyTermList() {
       {displayTerms.length === 0 ? (
         <h3 className='filter-container'>No Terms to Display...</h3>
       ) : null}
-      {paginate(displayTerms, 50, selectedPage).map(function (keyTerm) {
-        return (
-          <KeyTermContext.Provider value={keyTerm}>
-            <KeyTerm key={keyTerm.id} />
-          </KeyTermContext.Provider>
-        );
-      })}
+      {paginate(displayTerms, paginationLength, selectedPage).map(
+        (keyTerm, index) => {
+          return (
+            <KeyTermContext.Provider value={keyTerm}>
+              <KeyTerm index={index} key={keyTerm.id} />
+            </KeyTermContext.Provider>
+          );
+        }
+      )}
     </div>
   );
 }
@@ -291,12 +329,15 @@ function KeyTermsDashboard({ courseId }) {
             <div className='menu-bar'>
               <ActionRow>
                 <p>
-                  Displaying {pagination > 0 ? 1 + 50 * (selectedPage - 1) : 0}{' '}
+                  Displaying{' '}
+                  {pagination > 0
+                    ? 1 + paginationLength * (selectedPage - 1)
+                    : 0}
                   -
-                  {pagination * 50 < 50
-                    ? parseInt(pagination * 50)
-                    : 50 * selectedPage}{' '}
-                  of {parseInt(pagination * 50)} items
+                  {pagination * paginationLength < paginationLength
+                    ? parseInt(pagination * paginationLength)
+                    : paginationLength * selectedPage}{' '}
+                  of {parseInt(pagination * paginationLength)} items
                 </p>
                 {/* <p>
                 <a
@@ -310,8 +351,6 @@ function KeyTermsDashboard({ courseId }) {
                 <ActionRow.Spacer />
                 <SearchField
                   onSubmit={(value) => {
-                    console.log(`search submitted: ${value}`);
-                    console.log(value);
                     setSearchQuery(value);
                   }}
                   onClear={() => setSearchQuery('')}

@@ -32,6 +32,7 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
       course_id: course,
       definitions: definitionList,
       textbooks: [],
+      lessons: [],
       resources: resourceList,
     };
 

@@ -42,7 +42,7 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
     console.log(editTerm);
 
     const response = await fetch(restUrl, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },

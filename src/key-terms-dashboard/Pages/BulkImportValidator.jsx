@@ -363,6 +363,7 @@ function BulkImportValidator({
         } else {
           setSaveValue('error');
         }
+        setUpdate(data);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -509,7 +510,7 @@ function BulkImportValidator({
                   />
                   <p className='action-row'>
                     <i>
-                      Will remove {termData.length - fileData.length} existing
+                      Will remove {termData.length > fileData.length ? termData.length - fileData.length : 0} existing
                       terms <br />
                       that do not appear in {excelFile.name}
                     </i>

@@ -2,15 +2,19 @@
 
 import React from 'react';
 import { Input, Form } from '@edx/paragon';
+import { func, string } from 'prop-types';
 
 class BulkImportForm extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   render() {
     return (
       <div>
         <p>
-          Please upload file. Make sure you've formatted your excel file
+          Please upload file. Make sure you&apos;ve formatted your excel file
           according to the TEMPLATE provided.
         </p>
         <Input
@@ -46,5 +50,21 @@ class BulkImportForm extends React.Component {
     );
   }
 }
+
+BulkImportForm.defaultProps = {
+  setIsFilePicked: false,
+  setExcelFile: null,
+  setSaveValue: 'default',
+  setFileError: '',
+  fileError: '',
+};
+
+BulkImportForm.propTypes = {
+  setIsFilePicked: func,
+  setExcelFile: func,
+  setSaveValue: func,
+  setFileError: func,
+  fileError: string,
+};
 
 export default BulkImportForm;

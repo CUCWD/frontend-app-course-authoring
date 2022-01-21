@@ -1,13 +1,32 @@
 /* eslint-disable */
 
 import React from 'react';
+import { instanceOf, node } from 'prop-types';
 
 class DragAndDrop extends React.Component {
-  state = {
-    drag: false,
-  };
-
   dropRef = React.createRef();
+
+  constructor(props) {
+    super(props);
+    this.state = { drag: false };
+  }
+
+  componentDidMount() {
+    this.dragCounter = 0;
+    const div = this.dropRef.current;
+    div.addEventListener('dragenter', this.handleDragIn);
+    div.addEventListener('dragleave', this.handleDragOut);
+    div.addEventListener('dragover', this.handleDrag);
+    div.addEventListener('drop', this.handleDrop);
+  }
+
+  componentWillUnmount() {
+    const div = this.dropRef.current;
+    div.removeEventListener('dragenter', this.handleDragIn);
+    div.removeEventListener('dragleave', this.handleDragOut);
+    div.removeEventListener('dragover', this.handleDrag);
+    div.removeEventListener('drop', this.handleDrop);
+  }
 
   handleDrag = (e) => {
     e.preventDefault();
@@ -31,7 +50,9 @@ class DragAndDrop extends React.Component {
     e.stopPropagation();
     this.dragCounter--;
 
-    if (this.dragCounter > 0) return;
+    if (this.dragCounter > 0) {
+      return;
+    }
     this.setState({ drag: false });
     console.log(this.state);
   };
@@ -47,23 +68,6 @@ class DragAndDrop extends React.Component {
       this.dragCounter = 0;
     }
   };
-
-  componentDidMount() {
-    this.dragCounter = 0;
-    let div = this.dropRef.current;
-    div.addEventListener('dragenter', this.handleDragIn);
-    div.addEventListener('dragleave', this.handleDragOut);
-    div.addEventListener('dragover', this.handleDrag);
-    div.addEventListener('drop', this.handleDrop);
-  }
-
-  componentWillUnmount() {
-    let div = this.dropRef.current;
-    div.removeEventListener('dragenter', this.handleDragIn);
-    div.removeEventListener('dragleave', this.handleDragOut);
-    div.removeEventListener('dragover', this.handleDrag);
-    div.removeEventListener('drop', this.handleDrop);
-  }
 
   render() {
     return (
@@ -108,5 +112,15 @@ class DragAndDrop extends React.Component {
     );
   }
 }
+
+DragAndDrop.defaultProps = {
+  children: null,
+  handleDrop: null,
+};
+
+DragAndDrop.propTypes = {
+  children: node,
+  handleDrop: instanceOf(File),
+};
 
 export default DragAndDrop;

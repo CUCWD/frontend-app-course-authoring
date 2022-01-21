@@ -1,9 +1,7 @@
 /* eslint-disable */
 
-import React from 'react';
-
 function DeleteKeyTerm({ key_name }) {
-  confirm('Are you sure?');
+  window.confirm('Are you sure?');
   console.log(key_name);
 }
 

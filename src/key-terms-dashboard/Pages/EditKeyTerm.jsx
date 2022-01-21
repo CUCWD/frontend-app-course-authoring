@@ -1,14 +1,16 @@
 /* eslint-disable */
 
 import { ModalDialog, StatefulButton, ActionRow } from '@edx/paragon';
-import { useContext, useState } from 'react';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { func, bool, string } from 'prop-types';
+
 import EditKeyTermForm from './EditKeyTermForm';
 
-import { KeyTermContext } from '../KeyTermsDashboard';
+import { KeyTermContext, CourseContext } from '../KeyTermsDashboard';
 
 function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
   const { key_name, definitions, resources } = useContext(KeyTermContext);
+  const { setUpdate } = useContext(CourseContext);
   const keyTerm = useContext(KeyTermContext);
   const [saveValue, setSaveValue] = useState('default');
   const [definitionList, setDefinitionList] = useState(definitions);
@@ -25,7 +27,7 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
     },
   };
 
-  async function EditKeyTerm() {
+  async function EditTerm() {
     const restUrl = 'http://localhost:18500/api/v1/key_term/';
     const editTerm = {
       key_name: key_name,
@@ -54,6 +56,7 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
         } else {
           setSaveValue('error');
         }
+        setUpdate(data);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -104,7 +107,7 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
               // data-autofocus
               onClick={async () => {
                 setSaveValue('pending');
-                await EditKeyTerm();
+                await EditTerm();
                 setModalOpen(false);
               }}
             />
@@ -113,41 +116,18 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
       </ModalDialog>
     </>
   );
-
-  // return (
-  //   <div>
-  //     <Modal
-  //       open={modalOpen}
-  //       title='Edit Key Term'
-  //       size='fullscreen'
-  //       body={
-  //         <EditKeyTermForm
-  //           definitionList={definitionList}
-  //           setDefinitionList={setDefinitionList}
-  //           setSaveValue={setSaveValue}
-  //           keyTerm={keyTerm}
-  //         />
-  //       }
-  //       onClose={() => {
-  //         setModalOpen(false);
-  //         setSaveValue('default');
-  //       }}
-  //       buttons={[
-  //         <StatefulButton
-  //           // variant='success'
-  //           state={saveValue}
-  //           {...props}
-  //           // data-autofocus
-  //           onClick={() => {
-  //             EditKeyTerm();
-  //             setSaveValue('pending');
-  //             //   setModalOpen(false);
-  //           }}
-  //         />,
-  //       ]}
-  //     />
-  //   </div>
-  // );
 }
+
+EditKeyTerm.defaultProps = {
+  modalOpen: false,
+  setModalOpen: false,
+  courseId: '',
+};
+
+EditKeyTerm.propTypes = {
+  modalOpen: bool,
+  setModalOpen: func,
+  courseId: string,
+};
 
 export default EditKeyTerm;

@@ -1,12 +1,14 @@
 /* eslint-disable */
 
 import { Modal, StatefulButton } from '@edx/paragon';
-import { useState, useContext } from 'react';
-import React from 'react';
+import React, { useState, useContext } from 'react';
+import { func, bool } from 'prop-types';
+
 import KeyTermForm from './KeyTermForm';
 import { CourseContext } from '../KeyTermsDashboard';
 
 function CreateNewTerm({ modalOpen, setModalOpen }) {
+  const { setUpdate } = useContext(CourseContext);
   const [termValue, setTermValue] = useState('');
   const [defValue, setDefValue] = useState('');
   const [saveValue, setSaveValue] = useState('default');
@@ -67,6 +69,7 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
         } else {
           setSaveValue('error');
         }
+        setUpdate(data);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -130,5 +133,15 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
     </div>
   );
 }
+
+CreateNewTerm.defaultProps = {
+  modalOpen: false,
+  setModalOpen: false,
+};
+
+CreateNewTerm.propTypes = {
+  modalOpen: bool,
+  setModalOpen: func,
+};
 
 export default CreateNewTerm;

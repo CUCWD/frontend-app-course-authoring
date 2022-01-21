@@ -1,13 +1,15 @@
 /* eslint-disable */
 
-import React, { useContext } from 'react';
+import React from 'react';
 import { InputText, IconButton, Icon, Hyperlink } from '@edx/paragon';
 import { Add, Remove } from '@edx/paragon/icons';
-
-import { KeyTermContext } from '../KeyTermsDashboard';
+import { string, func, arrayOf, shape, object } from 'prop-types';
 
 class EditKeyTermForm extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   render() {
     return (
@@ -22,90 +24,22 @@ class EditKeyTermForm extends React.Component {
         />
         <div className='modal-col-left float-left'>
           <h3>Definitions:</h3>
-          {this.props.definitionList.map((x, i) => {
-            return (
-              <>
-                <InputText
-                  id='definition'
-                  name='definition'
-                  label='Definition'
-                  value={this.props.definitionList[i].description}
-                  // initialValue={definitionList[i].description}
-                  onChange={(input) => {
-                    const list = [...this.props.definitionList];
-                    list[i].description = input;
-                    this.props.setDefinitionList(list);
-                    this.props.setSaveValue('default');
-                  }}
-                />
-                {this.props.definitionList.length !== 1 && (
-                  <IconButton
-                    src={Remove}
-                    iconAs={Icon}
-                    size='sm'
-                    alt='Remove'
-                    variant='light'
-                    onClick={() => {
-                      const list = [...this.props.definitionList];
-                      list.splice(i, 1);
-                      this.props.setDefinitionList(list);
-                      this.props.setSaveValue('default');
-                    }}
-                  />
-                )}
-
-                {this.props.definitionList.length - 1 === i && (
-                  <IconButton
-                    src={Add}
-                    iconAs={Icon}
-                    size='sm'
-                    alt='Add'
-                    variant='light'
-                    onClick={() => {
-                      this.props.setDefinitionList([
-                        ...this.props.definitionList,
-                        { description: '' },
-                      ]);
-                      this.props.setSaveValue('default');
-                    }}
-                  />
-                )}
-              </>
-            );
-          })}
-        </div>
-
-        <div className='modal-col-right float-right'>
-          <h3>Resources:</h3>
-          {this.props.resourceList.map((x, i) => {
-            return (
-              <>
-                <InputText
-                  id='resourceLink'
-                  name='resourceLink'
-                  label='Resource URL'
-                  value={this.props.resourceList[i].resource_link}
-                  // initialValue={definitionList[i].description}
-                  onChange={(input) => {
-                    const list = [...this.props.resourceList];
-                    list[i].resource_link = input;
-                    this.props.setResourceList(list);
-                    this.props.setSaveValue('default');
-                  }}
-                />
-                <InputText
-                  id='friendlyName'
-                  name='friendlyName'
-                  label='Resource Title'
-                  value={this.props.resourceList[i].friendly_name}
-                  // initialValue={definitionList[i].description}
-                  onChange={(input) => {
-                    const list = [...this.props.resourceList];
-                    list[i].friendly_name = input;
-                    this.props.setResourceList(list);
-                    this.props.setSaveValue('default');
-                  }}
-                />
+          {this.props.definitionList.map((x, i) => (
+            <>
+              <InputText
+                id='definition'
+                name='definition'
+                label='Definition'
+                value={this.props.definitionList[i].description}
+                // initialValue={definitionList[i].description}
+                onChange={(input) => {
+                  const list = [...this.props.definitionList];
+                  list[i].description = input;
+                  this.props.setDefinitionList(list);
+                  this.props.setSaveValue('default');
+                }}
+              />
+              {this.props.definitionList.length !== 1 && (
                 <IconButton
                   src={Remove}
                   iconAs={Icon}
@@ -113,32 +47,96 @@ class EditKeyTermForm extends React.Component {
                   alt='Remove'
                   variant='light'
                   onClick={() => {
-                    const list = [...this.props.resourceList];
+                    const list = [...this.props.definitionList];
                     list.splice(i, 1);
-                    this.props.setResourceList(list);
+                    this.props.setDefinitionList(list);
                     this.props.setSaveValue('default');
                   }}
                 />
+              )}
 
-                {this.props.resourceList.length - 1 === i && (
-                  <IconButton
-                    src={Add}
-                    iconAs={Icon}
-                    size='sm'
-                    alt='Add'
-                    variant='light'
-                    onClick={() => {
-                      this.props.setResourceList([
-                        ...this.props.resourceList,
-                        { resource_link: '', friendly_name: '' },
-                      ]);
-                      this.props.setSaveValue('default');
-                    }}
-                  />
-                )}
-              </>
-            );
-          })}
+              {this.props.definitionList.length - 1 === i && (
+                <IconButton
+                  src={Add}
+                  iconAs={Icon}
+                  size='sm'
+                  alt='Add'
+                  variant='light'
+                  onClick={() => {
+                    this.props.setDefinitionList([
+                      ...this.props.definitionList,
+                      { description: '' },
+                    ]);
+                    this.props.setSaveValue('default');
+                  }}
+                />
+              )}
+            </>
+          ))}
+        </div>
+
+        <div className='modal-col-right float-right'>
+          <h3>Resources:</h3>
+          {this.props.resourceList.map((x, i) => (
+            <>
+              <InputText
+                id='resourceLink'
+                name='resourceLink'
+                label='Resource URL'
+                value={this.props.resourceList[i].resource_link}
+                // initialValue={definitionList[i].description}
+                onChange={(input) => {
+                  const list = [...this.props.resourceList];
+                  list[i].resource_link = input;
+                  this.props.setResourceList(list);
+                  this.props.setSaveValue('default');
+                }}
+              />
+              <InputText
+                id='friendlyName'
+                name='friendlyName'
+                label='Resource Title'
+                value={this.props.resourceList[i].friendly_name}
+                // initialValue={definitionList[i].description}
+                onChange={(input) => {
+                  const list = [...this.props.resourceList];
+                  list[i].friendly_name = input;
+                  this.props.setResourceList(list);
+                  this.props.setSaveValue('default');
+                }}
+              />
+              <IconButton
+                src={Remove}
+                iconAs={Icon}
+                size='sm'
+                alt='Remove'
+                variant='light'
+                onClick={() => {
+                  const list = [...this.props.resourceList];
+                  list.splice(i, 1);
+                  this.props.setResourceList(list);
+                  this.props.setSaveValue('default');
+                }}
+              />
+
+              {this.props.resourceList.length - 1 === i && (
+                <IconButton
+                  src={Add}
+                  iconAs={Icon}
+                  size='sm'
+                  alt='Add'
+                  variant='light'
+                  onClick={() => {
+                    this.props.setResourceList([
+                      ...this.props.resourceList,
+                      { resource_link: '', friendly_name: '' },
+                    ]);
+                    this.props.setSaveValue('default');
+                  }}
+                />
+              )}
+            </>
+          ))}
           {this.props.resourceList.length === 0 && (
             <div>
               <Hyperlink
@@ -161,90 +159,36 @@ class EditKeyTermForm extends React.Component {
   }
 }
 
-// class EditKeyTermForm extends React.Component {
-//   state = {};
+EditKeyTermForm.defaultProps = {
+  keyTerm: {
+    key_name: '',
+    course_id: '',
+    definitions: [],
+    textbooks: [],
+    resources: [],
+    lessons: [],
+  },
+  definitionList: [],
+  setDefinitionList: [],
+  resourceList: [],
+  setResourceList: [],
+  setSaveValue: 'default',
+};
 
-//   render() {
-//     return (
-//       <Form>
-//           <Form.Group controlId='keyTerm'>
-//             <Form.Label>Key Term</Form.Label>
-//             <Form.Control
-//               type='text'
-//               value={this.props.keyTerm.key_name}
-//               readOnly
-//             />
-//             <Form.Text muted>This field cannot be modified.</Form.Text>
-//           </Form.Group>
-
-//         {this.props.definitionList.map((x, i) => {
-//           return (
-//             <>
-//                 <Form.Group controlId='definition'>
-//                   <Form.Label>Definition</Form.Label>
-//                   {/* <InputGroup>
-//                     <Form.Control
-//                       as='textarea'
-//                       aria-label='With textarea'
-//                       value={this.props.definitionList[i].description}
-//                       onChange={(input) => {
-//                         const list = [...this.props.definitionList];
-//                         list[i].description = input;
-//                         this.props.setDefinitionList(list);
-//                         this.props.setSaveValue('default');
-//                       }}
-//                     />
-//                   </InputGroup> */}
-//                   <Form.Control
-//                     type='textarea'
-//                     value={this.props.definitionList[i].description}
-//                     onChange={(input) => {
-//                       const list = [...this.props.definitionList];
-//                       list[i].description = input;
-//                       this.props.setDefinitionList(list);
-//                       this.props.setSaveValue('default');
-//                     }}
-//                   />
-//                 </Form.Group>
-
-//               {this.props.definitionList.length !== 1 && (
-//                 <IconButton
-//                   src={Remove}
-//                   iconAs={Icon}
-//                   size='sm'
-//                   alt='Remove'
-//                   variant='light'
-//                   onClick={() => {
-//                     const list = [...this.props.definitionList];
-//                     list.splice(i, 1);
-//                     this.props.setDefinitionList(list);
-//                     this.props.setSaveValue('default');
-//                   }}
-//                 />
-//               )}
-
-//               {this.props.definitionList.length - 1 === i && (
-//                 <IconButton
-//                   src={Add}
-//                   iconAs={Icon}
-//                   size='sm'
-//                   alt='Add'
-//                   variant='light'
-//                   onClick={() => {
-//                     this.props.setDefinitionList([
-//                       ...this.props.definitionList,
-//                       { description: '' },
-//                     ]);
-//                     this.props.setSaveValue('default');
-//                   }}
-//                 />
-//               )}
-//             </>
-//           );
-//         })}
-//       </Form>
-//     );
-//   }
-// }
+EditKeyTermForm.propTypes = {
+  keyTerm: shape({
+    key_name: string,
+    course_id: string,
+    definitions: arrayOf(object),
+    textbooks: arrayOf(object),
+    resources: arrayOf(object),
+    lessons: arrayOf(object),
+  }),
+  definitionList: arrayOf(object),
+  setDefinitionList: func,
+  resourceList: arrayOf(object),
+  setResourceList: func,
+  setSaveValue: func,
+};
 
 export default EditKeyTermForm;

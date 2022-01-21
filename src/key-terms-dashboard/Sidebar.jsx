@@ -1,22 +1,19 @@
 /* eslint-disable */
 
-import React, { useContext } from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './KeyTermsDashboard.scss';
 
-import BulkImport from './Pages/BulkImport';
-import DragAndDrop from './Pages/DragAndDrop';
-import BulkImportValidator from './Pages/BulkImportValidator';
-import CreateNewTerm from './Pages/CreateNewTerm';
-
 import { Button } from '@edx/paragon';
-
 import { FontAwesomeIcon } from '@edx/paragon/node_modules/@fortawesome/react-fontawesome';
 import {
   faCloudUploadAlt,
   faFileDownload,
 } from '@edx/paragon/node_modules/@fortawesome/free-solid-svg-icons';
-import { CourseContext } from './KeyTermsDashboard';
+
+import BulkImport from './Pages/BulkImport';
+import DragAndDrop from './Pages/DragAndDrop';
+import BulkImportValidator from './Pages/BulkImportValidator';
+import CreateNewTerm from './Pages/CreateNewTerm';
 
 function BulkUploadDrop() {
   const [fileDrop, setFileDrop] = useState('');
@@ -25,10 +22,10 @@ function BulkUploadDrop() {
   const [bulkImportModal, setBulkImportModal] = useState(false);
   const [fileError, setFileError] = useState('');
 
-  const { courseId, termData } = useContext(CourseContext);
-
   const handleDrop = (files) => {
-    if (!files[0].name) return;
+    if (!files[0].name) {
+      return;
+    }
     if (
       files[0].type !==
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

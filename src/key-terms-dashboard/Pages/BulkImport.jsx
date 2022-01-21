@@ -1,8 +1,9 @@
 /* eslint-disable */
 
 import { Modal, StatefulButton } from '@edx/paragon';
-import { useState } from 'react';
-import React from 'react';
+import { bool, func } from 'prop-types';
+import React, { useState } from 'react';
+
 import BulkImportForm from './BulkImportForm';
 
 import BulkImportValidator from './BulkImportValidator';
@@ -73,5 +74,15 @@ function BulkImport({ modalOpen, setModalOpen }) {
     </div>
   );
 }
+
+BulkImport.defaultProps = {
+  modalOpen: 'false',
+  setModalOpen: 'false',
+};
+
+BulkImport.propTypes = {
+  modalOpen: bool,
+  setModalOpen: func,
+};
 
 export default BulkImport;

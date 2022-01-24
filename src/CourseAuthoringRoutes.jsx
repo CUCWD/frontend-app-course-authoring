@@ -6,6 +6,7 @@ import CourseAuthoringPage from './CourseAuthoringPage';
 import { PagesAndResources } from './pages-and-resources';
 import ProctoredExamSettings from './proctored-exam-settings/ProctoredExamSettings';
 import EditorProvider from './editors/EditorProvider';
+import KeyTermsDashboard from './key-terms-dashboard/KeyTermsDashboard';
 
 /**
  * As of this writing, these routes are mounted at a path prefixed with the following:
@@ -35,12 +36,12 @@ export default function CourseAuthoringRoutes({ courseId }) {
           <ProctoredExamSettings courseId={courseId} />
         </PageRoute>
         <PageRoute path={`${path}/editor/:blockType/:blockId`}>
-          {process.env.ENABLE_NEW_EDITOR_PAGES === 'true'
-            && (
-            <EditorProvider
-              courseId={courseId}
-            />
-            )}
+          {process.env.ENABLE_NEW_EDITOR_PAGES === 'true' && (
+            <EditorProvider courseId={courseId} />
+          )}
+        </PageRoute>
+        <PageRoute path={`${path}/key-terms-dashboard`}>
+          <KeyTermsDashboard courseId={courseId} />
         </PageRoute>
       </Switch>
     </CourseAuthoringPage>

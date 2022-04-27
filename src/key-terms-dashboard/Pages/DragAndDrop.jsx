@@ -63,7 +63,7 @@ class DragAndDrop extends React.Component {
     this.setState({ drag: false });
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       this.props.handleDrop(e.dataTransfer.files);
-      console.log(e.dataTransfer, files);
+      console.log(e.dataTransfer, e.dataTransfer.files);
       e.dataTransfer.clearData();
       this.dragCounter = 0;
     }

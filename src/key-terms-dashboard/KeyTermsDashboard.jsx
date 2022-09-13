@@ -76,7 +76,7 @@ function Lesson({ lesson }) {
   const encodedCourse = courseId.replace(' ', '+');
   return (
     <p>
-      <a key={lesson.id} target="_blank" rel="noopener noreferrer" href={`http://localhost:2000/course/${encodedCourse}/${lesson.lesson_link}`}> {lesson.module_name}&gt;{lesson.lesson_name}&gt;{lesson.unit_name}</a> &nbsp; &nbsp;
+      <a key={lesson.id} target="_blank" rel="noopener noreferrer" href={`http://apps.courses.maple3.ew-dev.com/course/${encodedCourse}/${lesson.lesson_link}`}> {lesson.module_name}&gt;{lesson.lesson_name}&gt;{lesson.unit_name}</a> &nbsp; &nbsp;
     </p>
   );
 }
@@ -88,7 +88,7 @@ function Textbook({ textbook }) {
   const { courseId } = useContext(CourseContext);
   const assetId = courseId.replace('course', 'asset');
 
-  const lmsTextbookLink = `localhost:18000/${assetId}+type@asset+block@${textbook.textbook_link}#page=${textbook.page_num}`;
+  const lmsTextbookLink = `http://courses.maple3.ew-dev.com/${assetId}+type@asset+block@${textbook.textbook_link}#page=${textbook.page_num}`;
 
   return (
     <p>
@@ -153,7 +153,7 @@ function KeyTerm({index}) {
   const [editTermModal, setEditTermModal] = useState(false);
 
   async function DeleteKeyTerm() {
-    const restUrl = 'http://localhost:18500/api/v1/key_term/';
+    const restUrl = 'keytermsapi:18500/api/v1/key_term/';
     const course = courseId.replaceAll('+', ' ');
     const termToDelete = {
       key_name: key_name,
@@ -244,7 +244,7 @@ function KeyTermList() {
     );
   }
 
-  const restUrl = `http://localhost:18500/api/v1/course_terms?course_id=${courseId}`;
+  const restUrl = `http://keytermsapi:18500/api/v1/course_terms?course_id=${courseId}`;
 
   useEffect(() => {
     fetch(restUrl)

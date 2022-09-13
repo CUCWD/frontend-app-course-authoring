@@ -308,7 +308,7 @@ function BulkImportValidator({
       terms_payload: termData,
     };
 
-    const restUrl = 'http://localhost:18500/api/v1/bulk_key_term_import/';
+    const restUrl = 'http://keytermsapi:18500/api/v1/bulk_key_term_import/';
     const response = await fetch(restUrl, {
       method: 'DELETE',
       headers: {
@@ -348,7 +348,7 @@ function BulkImportValidator({
       terms_payload: submittedData,
     };
 
-    const restUrl = 'http://localhost:18500/api/v1/bulk_key_term_import/';
+    const restUrl = 'http://keytermsapi:18500/api/v1/bulk_key_term_import/';
     const response = await fetch(restUrl, {
       method: 'POST',
       headers: {

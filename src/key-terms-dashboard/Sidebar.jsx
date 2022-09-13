@@ -120,7 +120,7 @@ function Sidebar() {
         </div>
         <div className='terms-template'>
           <a
-            href='http://localhost:18500/static/KEYTERM-TEMPLATE.xlsx'
+            href='http://keytermsapi:18500/static/KEYTERM-TEMPLATE.xlsx'
             download
           >
             <FontAwesomeIcon icon={faFileDownload} size='sm' />

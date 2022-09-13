@@ -31,7 +31,7 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
   };
 
   async function AddKeyTerm() {
-    const restUrl = 'http://localhost:18500/api/v1/key_term/';
+    const restUrl = 'http://keytermsapi:18500/api/v1/key_term/';
 
     // if (termValue === '') {
     //     setTermValue(null);

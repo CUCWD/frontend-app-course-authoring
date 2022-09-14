@@ -153,7 +153,7 @@ function KeyTerm({index}) {
   const [editTermModal, setEditTermModal] = useState(false);
 
   async function DeleteKeyTerm() {
-    const restUrl = 'keytermsapi:18500/api/v1/key_term/';
+    const restUrl = 'https://keyterms.api.maple3.ew-dev.com/api/v1/key_term/';
     const course = courseId.replaceAll('+', ' ');
     const termToDelete = {
       key_name: key_name,
@@ -244,7 +244,7 @@ function KeyTermList() {
     );
   }
 
-  const restUrl = `http://keytermsapi:18500/api/v1/course_terms?course_id=${courseId}`;
+  const restUrl = `https://keyterms.api.maple3.ew-dev.com/api/v1/course_terms?course_id=${courseId}`;
 
   useEffect(() => {
     fetch(restUrl)

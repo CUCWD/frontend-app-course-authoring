@@ -28,7 +28,7 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
   };
 
   async function EditTerm() {
-    const restUrl = 'http://keytermsapi:18500/api/v1/key_term/';
+    const restUrl = 'https://keyterms.api.maple3.ew-dev.com/api/v1/key_term/';
     const editTerm = {
       key_name: key_name,
       course_id: course,

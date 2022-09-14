@@ -31,7 +31,7 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
   };
 
   async function AddKeyTerm() {
-    const restUrl = 'http://keytermsapi:18500/api/v1/key_term/';
+    const restUrl = 'https://keyterms.api.maple3.ew-dev.com/api/v1/key_term/';
 
     // if (termValue === '') {
     //     setTermValue(null);

@@ -6,6 +6,7 @@ import { func, bool } from 'prop-types';
 
 import KeyTermForm from './KeyTermForm';
 import { CourseContext } from '../KeyTermsDashboard';
+import { getConfig } from '@edx/frontend-platform';
 
 function CreateNewTerm({ modalOpen, setModalOpen }) {
   const { setUpdate } = useContext(CourseContext);
@@ -31,7 +32,7 @@ function CreateNewTerm({ modalOpen, setModalOpen }) {
   };
 
   async function AddKeyTerm() {
-    const restUrl = 'https://keyterms.api.maple3.ew-dev.com/api/v1/key_term/';
+    const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/key_term/`;
 
     // if (termValue === '') {
     //     setTermValue(null);

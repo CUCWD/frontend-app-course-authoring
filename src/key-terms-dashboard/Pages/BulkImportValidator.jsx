@@ -23,6 +23,7 @@ import {
   instanceOf,
 } from 'prop-types';
 import { CourseContext } from '../KeyTermsDashboard';
+import { getConfig } from '@edx/frontend-platform';
 
 function ImportedData({ keyTerm }) {
   const { key_name, definitions, resources } = keyTerm;
@@ -308,7 +309,7 @@ function BulkImportValidator({
       terms_payload: termData,
     };
 
-    const restUrl = 'https://keyterms.api.maple3.ew-dev.com/api/v1/bulk_key_term_import/';
+    const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/bulk_key_term_import/`;
     const response = await fetch(restUrl, {
       method: 'DELETE',
       headers: {
@@ -348,7 +349,7 @@ function BulkImportValidator({
       terms_payload: submittedData,
     };
 
-    const restUrl = 'https://keyterms.api.maple3.ew-dev.com/api/v1/bulk_key_term_import/';
+    const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/bulk_key_term_import/`;
     const response = await fetch(restUrl, {
       method: 'POST',
       headers: {

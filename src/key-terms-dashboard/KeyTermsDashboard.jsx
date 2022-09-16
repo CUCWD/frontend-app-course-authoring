@@ -17,6 +17,7 @@ import {
 import { Delete, Edit, ExpandLess, ExpandMore } from '@edx/paragon/icons';
 
 import { injectIntl } from '@edx/frontend-platform/i18n';
+import { getConfig } from '@edx/frontend-platform';
 
 import EditKeyTerm from './Pages/EditKeyTerm';
 import Sidebar from './Sidebar';
@@ -76,7 +77,7 @@ function Lesson({ lesson }) {
   const encodedCourse = courseId.replace(' ', '+');
   return (
     <p>
-      <a key={lesson.id} target="_blank" rel="noopener noreferrer" href={`http://apps.courses.maple3.ew-dev.com/course/${encodedCourse}/${lesson.lesson_link}`}> {lesson.module_name}&gt;{lesson.lesson_name}&gt;{lesson.unit_name}</a> &nbsp; &nbsp;
+      <a key={lesson.id} target="_blank" rel="noopener noreferrer" href={`${getConfig().LEARNING_MFE_BASE_URL}/course/${encodedCourse}/${lesson.lesson_link}`}> {lesson.module_name}&gt;{lesson.lesson_name}&gt;{lesson.unit_name}</a> &nbsp; &nbsp;
     </p>
   );
 }
@@ -88,7 +89,7 @@ function Textbook({ textbook }) {
   const { courseId } = useContext(CourseContext);
   const assetId = courseId.replace('course', 'asset');
 
-  const lmsTextbookLink = `http://courses.maple3.ew-dev.com/${assetId}+type@asset+block@${textbook.textbook_link}#page=${textbook.page_num}`;
+  const lmsTextbookLink = `${getConfig().LMS_BASE_URL}/${assetId}+type@asset+block@${textbook.textbook_link}#page=${textbook.page_num}`;
 
   return (
     <p>
@@ -153,7 +154,7 @@ function KeyTerm({index}) {
   const [editTermModal, setEditTermModal] = useState(false);
 
   async function DeleteKeyTerm() {
-    const restUrl = 'https://keyterms.api.maple3.ew-dev.com/api/v1/key_term/';
+    const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/key_term/`;
     const course = courseId.replaceAll('+', ' ');
     const termToDelete = {
       key_name: key_name,
@@ -244,7 +245,7 @@ function KeyTermList() {
     );
   }
 
-  const restUrl = `https://keyterms.api.maple3.ew-dev.com/api/v1/course_terms?course_id=${courseId}`;
+  const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/course_terms?course_id=${courseId}`;
 
   useEffect(() => {
     fetch(restUrl)

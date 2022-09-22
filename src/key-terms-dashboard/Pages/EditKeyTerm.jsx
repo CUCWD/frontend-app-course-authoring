@@ -29,7 +29,7 @@ function EditKeyTerm({ modalOpen, setModalOpen, courseId }) {
   };
 
   async function EditTerm() {
-    const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/key_term/`;
+    const restUrl = `${process.env.KEYTERMS_API_BASE_URL}/api/v1/key_term/`;
     const editTerm = {
       key_name: key_name,
       course_id: course,

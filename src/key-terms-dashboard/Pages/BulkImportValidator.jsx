@@ -309,7 +309,7 @@ function BulkImportValidator({
       terms_payload: termData,
     };
 
-    const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/bulk_key_term_import/`;
+    const restUrl = `${process.env.KEYTERMS_API_BASE_URL}/api/v1/bulk_key_term_import/`;
     const response = await fetch(restUrl, {
       method: 'DELETE',
       headers: {
@@ -349,7 +349,7 @@ function BulkImportValidator({
       terms_payload: submittedData,
     };
 
-    const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/bulk_key_term_import/`;
+    const restUrl = `${process.env.KEYTERMS_API_BASE_URL}/api/v1/bulk_key_term_import/`;
     const response = await fetch(restUrl, {
       method: 'POST',
       headers: {

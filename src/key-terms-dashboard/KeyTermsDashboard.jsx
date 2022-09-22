@@ -154,7 +154,7 @@ function KeyTerm({index}) {
   const [editTermModal, setEditTermModal] = useState(false);
 
   async function DeleteKeyTerm() {
-    const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/key_term/`;
+    const restUrl = `${process.env.KEYTERMS_API_BASE_URL}/api/v1/key_term/`;
     const course = courseId.replaceAll('+', ' ');
     const termToDelete = {
       key_name: key_name,
@@ -245,7 +245,7 @@ function KeyTermList() {
     );
   }
 
-  const restUrl = `${getConfig().KEYTERMS_API_BASE_URL}/api/v1/course_terms?course_id=${courseId}`;
+  const restUrl = `${process.env.KEYTERMS_API_BASE_URL}/api/v1/course_terms?course_id=${courseId}`;
 
   useEffect(() => {
     fetch(restUrl)

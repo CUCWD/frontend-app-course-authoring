@@ -77,7 +77,7 @@ function Lesson({ lesson }) {
   const encodedCourse = courseId.replace(' ', '+');
   return (
     <p>
-      <a key={lesson.id} target="_blank" rel="noopener noreferrer" href={`${getConfig().LEARNING_MFE_BASE_URL}/course/${encodedCourse}/${lesson.lesson_link}`}> {lesson.module_name}&gt;{lesson.lesson_name}&gt;{lesson.unit_name}</a> &nbsp; &nbsp;
+      <a key={lesson.id} target="_blank" rel="noopener noreferrer" href={`${process.env.CMS_BASE_URL}/container/${lesson.lesson_link}`}> {lesson.module_name}&gt;{lesson.lesson_name}&gt;{lesson.unit_name}</a> &nbsp; &nbsp;
     </p>
   );
 }

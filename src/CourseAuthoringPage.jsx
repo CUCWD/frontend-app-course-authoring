@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   useLocation,
 } from 'react-router-dom';
+
 import Header from './studio-header/Header';
 import { fetchCourseDetail } from './data/thunks';
 import { useModel } from './generic/model-store';
@@ -56,7 +57,7 @@ export default function CourseAuthoringPage({ courseId, children }) {
       using url pattern containing /editor/,
       we shouldn't have the header and footer on these pages.
       This functionality will be removed in TNL-9591 */}
-      {inProgress ? !pathname.includes('/editor/') && <Loading /> : <AppHeader />}
+      {inProgress ? !pathname.includes('/editor/') && <Loading /> : <AppHeader /> }
       {children}
       {!inProgress && <AppFooter />}
     </div>
